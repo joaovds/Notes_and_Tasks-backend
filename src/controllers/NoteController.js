@@ -28,4 +28,20 @@ module.exports = {
         });
         return res.json({ id });
     },
+
+    async delete(req, res) {
+        const { cd_note } = req.params;
+        const id_user = req.headers.authorization;
+
+        const note = await connection('tb_note').where('cd_note', cd_note)
+            .select('id_user').first();
+
+        if (note.id_user !== id_user) {
+            return res.status(401).json({ error: 'Operação Inválida' });
+        }
+
+        await (await connection('tb_note').where('cd_note', cd_note).delete());
+
+        return res.status(204).send();
+    },
 }

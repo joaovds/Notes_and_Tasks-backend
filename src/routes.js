@@ -10,5 +10,6 @@ routes.post('/user', userController.create);
 
 routes.get('/note', noteController.index);
 routes.post('/note', noteController.create);
+routes.delete('/note/:cd_note', noteController.delete);
 
 module.exports = routes;
