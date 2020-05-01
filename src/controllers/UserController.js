@@ -3,6 +3,12 @@ const crypto = require('crypto');
 
 module.exports = {
 
+    async index(req, res) {
+        const user = await connection('tb_user').select('*');
+
+        return res.json(user);
+    },
+
     async create(req, res) {
         const { name, email, password } = req.body;
 
