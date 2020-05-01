@@ -8,6 +8,7 @@ const routes = express.Router();
 routes.get('/user', userController.index);
 routes.post('/user', userController.create);
 
+routes.get('/note', noteController.index);
 routes.post('/note', noteController.create);
 
 module.exports = routes;
