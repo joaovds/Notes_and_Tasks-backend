@@ -3,8 +3,11 @@ const express = require('express');
 const userController = require('./controllers/UserController.js');
 const noteController = require('./controllers/NoteController.js');
 const userNotesController = require('./controllers/UserNotesController.js');
+const sessionController = require('./controllers/SessionController.js');
 
 const routes = express.Router();
+
+routes.post('/session', sessionController.create);
 
 routes.get('/user', userController.index);
 routes.post('/user', userController.create);
