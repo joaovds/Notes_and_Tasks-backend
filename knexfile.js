@@ -7,7 +7,7 @@ module.exports = {
     connection: {
       host: '127.0.0.1', //Your Host
       user: 'root', //Your user
-      password: 'usbw', //Your password
+      password: '', //Your password
       database: 'db_note',
       timezone: 'UTC'
     },
