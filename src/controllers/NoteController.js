@@ -17,16 +17,50 @@ module.exports = {
         return res.json(notes);
     },
 
-    async create(req, res) {
-        const { title, note } = req.body;
-        const id_user = req.headers.authorization;
+    async create(req, res, next) {
 
-        const [id] = await connection('tb_note').insert({
-            title,
-            note,
-            id_user,
-        });
-        return res.json({ id });
+        try {
+            const { title, note } = req.body;
+            const id_user = req.headers.authorization;
+
+            const [id] = await connection('tb_note').insert({
+                title,
+                note,
+                id_user,
+            });
+
+            return res.json({ id });
+
+        } catch (error) {
+            next(error)
+        }
+    },
+
+    async update(req, res, next) {
+
+        try {
+            
+            const { cd_note } = req.params;
+            const id_user = req.headers.authorization;
+            const { title, note } = req.body;
+
+            const id = await connection('tb_note').where('cd_note', cd_note)
+            .select('id_user').first();
+
+            if (id.id_user !== id_user) {
+                return res.status(401).json({ error: 'Operação Inválida' });
+            }
+
+            await connection('tb_note').update({
+                title,
+                note,
+            }).where({ cd_note });
+
+            return res.send();
+
+        } catch (error) {
+            next(error);
+        }
     },
 
     async delete(req, res) {
