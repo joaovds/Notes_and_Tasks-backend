@@ -3,24 +3,34 @@ const crypto = require('crypto');
 
 module.exports = {
 
-    async index(req, res) {
-        const user = await connection('tb_user').select('*');
+    async index(req, res, next) {
+        
+        try {
+            const user = await connection('tb_user').select('*');
 
-        return res.json(user);
+            return res.json(user);
+        } catch (error) {
+            next(error);
+        }
     },
 
-    async create(req, res) {
-        const { name, email, password } = req.body;
+    async create(req, res, next) {
 
-        const cd_user = crypto.randomBytes(4).toString('HEX');
+        try {
+            const { name, email, password } = req.body;
 
-        await connection('tb_user').insert({
-            cd_user,
-            name,
-            email,
-            password,
-        });
+            const cd_user = crypto.randomBytes(4).toString('HEX');
 
-        return res.json({ cd_user });
+            await connection('tb_user').insert({
+                cd_user,
+                name,
+                email,
+                password,
+            });
+
+            return res.json({ cd_user });
+        } catch (error) {
+            next(error);
+        }
     },
 }
