@@ -44,7 +44,8 @@ module.exports = {
         try {
             
             const { cd_user } = req.params;
-            const { email, password } = req.body;
+            const { email } = req.body;
+            let { password } = req.body;
             const updated_user = null;
 
             const user = await connection('tb_user').where('cd_user', cd_user)
@@ -53,6 +54,9 @@ module.exports = {
             if (user.email !== email) {
                 return res.status(401).json({ error: 'Operação Inválida' });
             }
+
+            const passHash = await bcrypt.hash(password, 10);
+            password = passHash;
 
             await connection('tb_user').update({
                 password,
