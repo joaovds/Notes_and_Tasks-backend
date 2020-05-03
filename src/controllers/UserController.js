@@ -1,5 +1,6 @@
 const connection = require('../database/connection');
 const crypto = require('crypto');
+const bcrypt = require('bcrypt');
 
 module.exports = {
 
@@ -17,9 +18,13 @@ module.exports = {
     async create(req, res, next) {
 
         try {
-            const { name, email, password } = req.body;
+            const { name, email } = req.body;
+            let { password } = req.body;
 
             const cd_user = crypto.randomBytes(4).toString('HEX');
+
+            const passHash = await bcrypt.hash(password, 10);
+            password = passHash;
 
             await connection('tb_user').insert({
                 cd_user,
