@@ -33,4 +33,31 @@ module.exports = {
             next(error);
         }
     },
+
+    async updatePassword(req, res, next) {
+
+        try {
+            
+            const { cd_user } = req.params;
+            const { email, password } = req.body;
+            const updated_user = null;
+
+            const user = await connection('tb_user').where('cd_user', cd_user)
+            .select('email').first();
+
+            if (user.email !== email) {
+                return res.status(401).json({ error: 'Operação Inválida' });
+            }
+
+            await connection('tb_user').update({
+                password,
+                updated_user,
+            }).where({ cd_user });
+
+            return res.send();
+
+        } catch (error) {
+            next(error);
+        }
+    },
 }

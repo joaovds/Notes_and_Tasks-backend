@@ -12,6 +12,7 @@ routes
 
     .get('/user', userController.index)
     .post('/user', userController.create)
+    .put('/user/:cd_user', userController.updatePassword)
 
     .get('/usernotes', userNotesController.index)
 
