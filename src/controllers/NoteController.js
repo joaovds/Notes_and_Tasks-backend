@@ -9,7 +9,7 @@ module.exports = {
 
         const notes = await connection('tb_note')
             .join('tb_user', 'tb_user.cd_user', '=', 'tb_note.id_user')
-            .offset((page - 1) * 5)
+            .offset((page - 1) * 10)
             .select(['tb_note.*', 'tb_user.name']);
 
         res.header('Total-Notes', contador['count(*)']);
@@ -43,6 +43,7 @@ module.exports = {
             const { cd_note } = req.params;
             const id_user = req.headers.authorization;
             const { title, note } = req.body;
+            const updateDate = null;
 
             const id = await connection('tb_note').where('cd_note', cd_note)
             .select('id_user').first();
@@ -51,9 +52,12 @@ module.exports = {
                 return res.status(401).json({ error: 'Operação Inválida' });
             }
 
+            console.log(updateDate);
+
             await connection('tb_note').update({
                 title,
                 note,
+                updateDate,
             }).where({ cd_note });
 
             return res.send();
