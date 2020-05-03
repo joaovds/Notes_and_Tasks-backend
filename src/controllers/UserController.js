@@ -34,7 +34,7 @@ module.exports = {
                 password,
             });
 
-            return res.json({ cd_user });
+            return res.send({ cd_user });
         } catch (error) {
             next(error);
         }
@@ -64,6 +64,29 @@ module.exports = {
                 password,
                 updated_user,
             }).where({ cd_user });
+
+            return res.send();
+
+        } catch (error) {
+            next(error);
+        }
+    },
+
+    async delete(req, res, next) {
+
+        try {
+            
+            const { cd_user } = req.params;
+            let { password } = req.body;
+
+            const user = await connection('tb_user').where('cd_user', cd_user)
+            .select('password').first();
+
+            if (!await bcrypt.compare(password, user.password)) {
+                return res.status(400).json({ error: 'Incorrect user password'});
+            }
+
+            await connection('tb_user').where('cd_user', cd_user).delete();
 
             return res.send();
 

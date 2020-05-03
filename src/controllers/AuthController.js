@@ -1,8 +1,16 @@
 const connection = require('../database/connection');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const authConfig = require('../config/auth');
+
+
+function generateToken(params = {}) {
+    return jwt.sign(params, authConfig.secret, {
+        expiresIn: 86408,
+    });
+}
 
 module.exports = {
-
     async create(req, res, next) {
 
         try {
@@ -22,9 +30,14 @@ module.exports = {
                 return res.status(400).json({ error: 'Incorrect user password'});
             }
 
-            return res.json(user);
+            user.password = undefined;
+
+            return res.send({
+                user,
+                token: generateToken({ id: user.cd_user}),
+            });
         } catch (error) {
             next(error);
         }
-    }
+    },
 }
