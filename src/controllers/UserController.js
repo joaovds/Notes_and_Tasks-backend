@@ -23,6 +23,7 @@ module.exports = {
 
             const cd_user = crypto.randomBytes(4).toString('HEX');
 
+            // Encriptação
             const passHash = await bcrypt.hash(password, 10);
             password = passHash;
 
@@ -55,6 +56,7 @@ module.exports = {
                 return res.status(401).json({ error: 'Operação Inválida' });
             }
 
+            // Encriptação
             const passHash = await bcrypt.hash(password, 10);
             password = passHash;
 

@@ -1,22 +1,30 @@
 const connection = require('../database/connection');
+const bcrypt = require('bcrypt');
 
 module.exports = {
 
-    async create(req, res) {
-        
-        const { email, password } = req.body;
+    async create(req, res, next) {
 
-        const user = await connection('tb_user')
-            .where({
-                'email': email,
-                'password': password,
-            })
-            .select(['name', 'cd_user']).first();
+        try {
+            const { email, password } = req.body;
 
-        if (!user) {
-            return res.status(400).json({ error: 'Usuário não correspondente'});
+            const user = await connection('tb_user')
+                .where({
+                    'email': email,
+                })
+                .select(['cd_user', 'name', 'password']).first();
+
+            if (!user) {
+                return res.status(400).json({ error: 'User not found'});
+            }
+            
+            if (!await bcrypt.compare(password, user.password)) {
+                return res.status(400).json({ error: 'Incorrect user password'});
+            }
+
+            return res.json(user);
+        } catch (error) {
+            next(error);
         }
-
-        return res.json(user);
     }
 }
