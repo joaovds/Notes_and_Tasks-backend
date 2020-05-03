@@ -52,8 +52,6 @@ module.exports = {
                 return res.status(401).json({ error: 'Operação Inválida' });
             }
 
-            console.log(updateDate);
-
             await connection('tb_note').update({
                 title,
                 note,
