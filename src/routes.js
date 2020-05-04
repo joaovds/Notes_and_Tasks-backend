@@ -3,16 +3,17 @@ const express = require('express');
 const userController = require('./controllers/UserController.js');
 const noteController = require('./controllers/NoteController.js');
 const userNotesController = require('./controllers/UserNotesController.js');
-const sessionController = require('./controllers/SessionController.js');
+const authController = require('./controllers/AuthController.js');
 
 const routes = express.Router();
 
 routes
-    .post('/session', sessionController.create)
+    .post('/authenticate', authController.create)
 
     .get('/user', userController.index)
     .post('/user', userController.create)
     .put('/user/:cd_user', userController.updatePassword)
+    .delete('/user/:cd_user', userController.delete)
 
     .get('/usernotes', userNotesController.index)
 
