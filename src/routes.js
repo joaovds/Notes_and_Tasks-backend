@@ -15,7 +15,7 @@ routes
     .put('/user/:cd_user', userController.updatePassword)
     .delete('/user/:cd_user', userController.delete)
 
-    .get('/usernotes', userNotesController.index)
+    .get('/userNotes', userNotesController.index)
 
     .get('/note', noteController.index)
     .post('/note', noteController.create)
