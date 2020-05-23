@@ -1,10 +1,10 @@
 
 exports.up = knex => knex.schema.createTable('tb_user', table => {
 
-    table.string('cd_user').primary();
+    table.increments('cd_user');
 
     table.string('name', 45).notNullable();
-    table.string('email', 45).notNullable().unique();
+    table.string('email', 100).notNullable().unique();
     table.string('password').notNullable();
 
     table.timestamp('created_user').defaultTo(knex.fn.now());
